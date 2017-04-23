@@ -62,10 +62,8 @@ class Main extends Component {
             actions={standardActions}
             onRequestClose={this.handleRequestClose}
           >
-            1-2-3-4-5
+            予約完了しました！
           </Dialog>
-          <h1>Material-UI</h1>
-          <h2>example project</h2>
           <RaisedButton
             label="Super Secret Password"
             secondary={true}
