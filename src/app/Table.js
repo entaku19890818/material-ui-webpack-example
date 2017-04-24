@@ -6,16 +6,22 @@ import React, {Component} from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 import {deepOrange500} from 'material-ui/styles/colors';
-import FlatButton from 'material-ui/FlatButton';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import IconButton from 'material-ui/IconButton';
+import AddCircle from 'material-ui/svg-icons/content/add-circle';
 
 
 const styles = {
-  container: {
-    textAlign: 'center',
-    paddingTop: 200,
-  },
+	largeIcon: {
+		width: 60,
+		height: 60,
+	},
+	large: {
+		width: 120,
+		height: 120,
+		padding: 30,
+	}
 };
 
 const muiTheme = getMuiTheme({
@@ -24,14 +30,9 @@ const muiTheme = getMuiTheme({
   },
 });
 
-class Main extends Component {
-  constructor(props, context) {
-    super(props, context);
 
-    this.state = {
-      open: false,
-    };
-  }
+class Table extends Component {
+
 
   handleRequestClose = () => {
     this.setState({
@@ -46,34 +47,23 @@ class Main extends Component {
   }
 
   render() {
-    const standardActions = (
-      <FlatButton
-        label="Ok"
-        primary={true}
-        onTouchTap={this.handleRequestClose}
-      />
-    );
 
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
-          <Dialog
-            open={this.state.open}
-            title="Super Secret Password"
-            actions={standardActions}
-            onRequestClose={this.handleRequestClose}
-          >
-            予約完了しました！
-          </Dialog>
-          <RaisedButton
-            label="Super Secret Password"
-            secondary={true}
-            onTouchTap={this.handleTouchTap}
-          />
+				<IconButton
+					iconStyle={styles.largeIcon}
+					style={styles.large}
+					tooltip="ディエゴ"
+					touch={true}
+					tooltipPosition="top-left"
+					>
+					<AddCircle />
+				</IconButton>
         </div>
       </MuiThemeProvider>
     );
   }
 }
 
-export default Main;
+export default Table;
