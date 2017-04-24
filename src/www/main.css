@@ -5,4 +5,18 @@ html {
 body {
   font-size: 13px;
   line-height: 20px;
+	background-image: url("/img/floor.png");
+	 background-size: 1200px 630px;
+	background-repeat: no-repeat;
+}
+
+
+div.luke {
+
+	    height: 100px;
+	    width: 100px;
+	    left: 518px;
+	    top: 238px;
+	    position: relative;
+
 }
