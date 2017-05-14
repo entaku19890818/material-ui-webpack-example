@@ -13,6 +13,6 @@ injectTapEventPlugin();
 // For more details see: https://facebook.github.io/react/docs/top-level-api.html#react.render
 //render(<Main />, document.getElementById('app'));
 render(<Facility />, document.getElementById('facility'));
-render(<Human />, document.getElementById('human'));
+//render(<Human />, document.getElementById('human'));
 
 //render(<Card />, document.getElementById('card'));

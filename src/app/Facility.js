@@ -13,8 +13,11 @@ import AddCircle from 'material-ui/svg-icons/content/add-circle';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import request from 'superagent';
+import RefreshIndicator from 'material-ui/RefreshIndicator';
+require('date-utils');
 
-
+const dt = new Date();
+const Today = dt;
 
 const styles = {
 	largeIcon: {
@@ -25,8 +28,70 @@ const styles = {
 		width: 120,
 		height: 120,
 		padding: 30,
-	}
+	},
+	container: {
+	position: 'relative',
+	},
+	refresh: {
+		display: 'inline-block',
+		position: 'relative',
+	},
 };
+
+const tableData = [
+  {
+		"starttime": "08:00",
+    "endtime": "09:00",
+  },
+  {
+		"starttime": "09:00",
+    "endtime": "10:00",
+  },
+  {
+		"starttime": "10:00",
+    "endtime": "11:00",
+  },
+  {
+		"starttime": "11:00",
+    "endtime": "12:00",
+  },
+  {
+		"starttime": "12:00",
+    "endtime": "13:00",
+  },
+  {
+		"starttime": "13:00",
+    "endtime": "14:00",
+  },
+  {
+		"starttime": "14:00",
+    "endtime": "15:00",
+  },
+	{
+		"starttime": "15:00",
+		"endtime": "16:00",
+	},
+	{
+		"starttime": "16:00",
+		"endtime": "17:00",
+	},
+	{
+		"starttime": "17:00",
+		"endtime": "18:00",
+	},
+	{
+		"starttime": "18:00",
+		"endtime": "19:00",
+	},
+	{
+		"starttime": "19:00",
+		"endtime": "20:00",
+	},
+	{
+		"starttime": "20:00",
+		"endtime": "21:00",
+	},
+];
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -35,11 +100,23 @@ const muiTheme = getMuiTheme({
 });
 
 
+
+
+
 class Facility extends Component {
+
+	postData = {
+		"id": 1,
+		"stertdate": Today,
+		"enddate": Today,
+		"starttime": "08:00",
+		"endtime": "09:00",
+		"title": "TDL定例会議"
+	};
 
 	state = {
     open: false,
-		value: 'Please write an essay about your favorite DOM element.'
+		loading: false
   };
 
 	handleOpen = () => {
@@ -49,19 +126,30 @@ class Facility extends Component {
   handleClose = () => {
     this.setState({open: false});
   };
+	submitStert = () => {
+    this.setState({loading: true});
+  };
+
+  submitStop = () => {
+    this.setState({loading: false});
+  };
+
+	changeTime = (e) => {
+		console.log(e);
+		console.log(tableData[e].starttime);
+
+
+		this.postData.starttime = tableData[e].starttime;
+		this.postData.endtime = tableData[e].endtime;
+				console.log(this.postData);
+	;}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-    this.setState({value: "OK"});
 		request
 		  .post('http://localhost:3100/add')
 			.type('form')
-		  .send({"id": 1,
-    "stertdate": "2017-04-24",
-		"enddate": "2017-04-24",
-    "starttime": "22:00",
-    "endtime": "23:00",
-    "title": "TDL定例会議" }) // query string
+		  .send(this.postData)
 		  .end(function(err, res){
 					console.log(err);
 					console.log(res);
@@ -91,28 +179,24 @@ class Facility extends Component {
 					modal={false}
 					open={this.state.open}
 					onRequestClose={this.handleClose}
+					autoScrollBodyContent={true}
 				>
 					The actions in this window were passed in as an array of React objects.
 					<form onSubmit={this.handleSubmit}>
-					<Table>
+					<Table onCellClick={this.changeTime}>
 						<TableHeader>
 							<TableRow>
 								<TableHeaderColumn>スケジュール</TableHeaderColumn>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
-							<TableRow >
-								<TableRowColumn >20:00-21:00</TableRowColumn>
-							</TableRow>
-							<TableRow>
-								<TableRowColumn>21:00-22:00</TableRowColumn>
-							</TableRow>
-							<TableRow>
-								<TableRowColumn>22:00-23:00</TableRowColumn>
-							</TableRow>
-							<TableRow>
-								<TableRowColumn>23:00-24:00</TableRowColumn>
-							</TableRow>
+						{tableData.map( (row, index) => (
+              <TableRow key={index}>
+                <TableRowColumn>{index}</TableRowColumn>
+                <TableRowColumn>{row.starttime}</TableRowColumn>
+                <TableRowColumn>{row.endtime}</TableRowColumn>
+              </TableRow>
+              ))}
 						</TableBody>
 						</Table>
 						<FlatButton
@@ -131,6 +215,8 @@ class Facility extends Component {
 				</Dialog>
         </div>
       </MuiThemeProvider>
+
+
     );
   }
 }
