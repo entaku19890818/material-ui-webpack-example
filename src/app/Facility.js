@@ -14,10 +14,13 @@ import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import request from 'superagent';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
-require('date-utils');
+
 
 const dt = new Date();
-const Today = dt;
+var date = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
+
+
+
 
 const styles = {
 	largeIcon: {
@@ -30,7 +33,7 @@ const styles = {
 		padding: 30,
 	},
 	container: {
-	position: 'relative',
+		position: 'relative',
 	},
 	refresh: {
 		display: 'inline-block',
@@ -106,9 +109,9 @@ const muiTheme = getMuiTheme({
 class Facility extends Component {
 
 	postData = {
-		"id": 1,
-		"stertdate": Today,
-		"enddate": Today,
+		"desknetsId": 11,
+		"stertdate": date,
+		"enddate": date,
 		"starttime": "08:00",
 		"endtime": "09:00",
 		"title": "TDL定例会議"
@@ -116,7 +119,7 @@ class Facility extends Component {
 
 	state = {
     open: false,
-		loading: false
+		loading: 'hide'
   };
 
 	handleOpen = () => {
@@ -126,19 +129,9 @@ class Facility extends Component {
   handleClose = () => {
     this.setState({open: false});
   };
-	submitStert = () => {
-    this.setState({loading: true});
-  };
 
-  submitStop = () => {
-    this.setState({loading: false});
-  };
 
 	changeTime = (e) => {
-		console.log(e);
-		console.log(tableData[e].starttime);
-
-
 		this.postData.starttime = tableData[e].starttime;
 		this.postData.endtime = tableData[e].endtime;
 				console.log(this.postData);
@@ -146,16 +139,23 @@ class Facility extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
+		this.setState({loading: 'loading'});
 		request
 		  .post('http://localhost:3100/add')
 			.type('form')
 		  .send(this.postData)
-		  .end(function(err, res){
+		  .end((err, res)　=> {
 					console.log(err);
 					console.log(res);
+					if(res.status == 200){
 
+					}else {
 
+					}
+
+					this.setState({loading: 'hide'});
 		  });
+
 		return;
   }
 
@@ -186,13 +186,13 @@ class Facility extends Component {
 					<Table onCellClick={this.changeTime}>
 						<TableHeader>
 							<TableRow>
-								<TableHeaderColumn>スケジュール</TableHeaderColumn>
+								<TableHeaderColumn>開始時間</TableHeaderColumn>
+								<TableHeaderColumn>終了時間</TableHeaderColumn>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
 						{tableData.map( (row, index) => (
               <TableRow key={index}>
-                <TableRowColumn>{index}</TableRowColumn>
                 <TableRowColumn>{row.starttime}</TableRowColumn>
                 <TableRowColumn>{row.endtime}</TableRowColumn>
               </TableRow>
@@ -213,10 +213,16 @@ class Facility extends Component {
 						/>
 					</form>
 				</Dialog>
+				<RefreshIndicator
+					size={50}
+					left={70}
+					top={0}
+					loadingColor="#FF9800"
+					status={this.state.loading}
+					style={styles.refresh}
+				/>
         </div>
       </MuiThemeProvider>
-
-
     );
   }
 }
