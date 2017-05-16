@@ -17,6 +17,9 @@ import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 
 const dt = new Date();
+const HOSTNAME = 'localhost';
+const URL = 'http://' + HOSTNAME + ':3100/add'
+
 var date = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
 
 
@@ -141,7 +144,7 @@ class Facility extends Component {
 		e.preventDefault();
 		this.setState({loading: 'loading'});
 		request
-		  .post('http://localhost:3100/add')
+		  .post(URL)
 			.type('form')
 		  .send(this.postData)
 		  .end((err, res)　=> {
