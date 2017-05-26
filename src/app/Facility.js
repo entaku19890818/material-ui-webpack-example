@@ -108,16 +108,17 @@ const muiTheme = getMuiTheme({
 
 
 
-
 class Facility extends Component {
 
 	postData = {
 		"desknetsId": 11,
-		"stertdate": date,
+		"startdate": date,
 		"enddate": date,
 		"starttime": "08:00",
 		"endtime": "09:00",
-		"title": "TDL定例会議"
+		"title": "TDL定例会議",
+		//"start" : "",
+		//"end" : ""
 	};
 
 	state = {
@@ -142,7 +143,11 @@ class Facility extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
+		//this.postData.start = this.postData.startdate.toString() + ' ' + this.postData.starttime;
+		//this.postData.end = this.postData.enddate.toString() + ' ' + this.postData.endtime;
 		this.setState({loading: 'loading'});
+
+
 		request
 		  .post(URL)
 			.type('form')
@@ -229,5 +234,8 @@ class Facility extends Component {
     );
   }
 }
+
+
+
 
 export default Facility;
