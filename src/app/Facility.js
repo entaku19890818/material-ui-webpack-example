@@ -18,7 +18,7 @@ import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const dt = new Date();
 const HOSTNAME = 'localhost';
-const URL = 'http://' + HOSTNAME + ':3100/add'
+const URL = 'http://' + HOSTNAME + ':3100/'
 
 var date = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
 
@@ -117,8 +117,8 @@ class Facility extends Component {
 		"starttime": "08:00",
 		"endtime": "09:00",
 		"title": "TDL定例会議",
-		//"start" : "",
-		//"end" : ""
+		"start" : "",
+		"end" : ""
 	};
 
 	state = {
@@ -143,8 +143,8 @@ class Facility extends Component {
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-		//this.postData.start = this.postData.startdate.toString() + ' ' + this.postData.starttime;
-		//this.postData.end = this.postData.enddate.toString() + ' ' + this.postData.endtime;
+		this.postData.start = this.postData.startdate.toString() + ' ' + this.postData.starttime;
+		this.postData.end = this.postData.enddate.toString() + ' ' + this.postData.endtime;
 		this.setState({loading: 'loading'});
 
 
