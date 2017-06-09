@@ -118,33 +118,42 @@ class Facility extends Component {
 		"endtime": "09:00",
 		"title": "TDL定例会議",
 		"start" : "",
-		"end" : ""
+		"end" : "",
+		"facilityID": 1
 	};
 
 	state = {
     open: false,
-		loading: 'hide'
+		loading: 'hide',
+		err_open: false,
+		ok_open: false,
   };
+
+
 
 	handleOpen = () => {
     this.setState({open: true});
+
   };
 
   handleClose = () => {
     this.setState({open: false});
+		this.setState({err_open: false});
+		this.setState({ok_open: false});
   };
 
 
 	changeTime = (e) => {
 		this.postData.starttime = tableData[e].starttime;
 		this.postData.endtime = tableData[e].endtime;
+		this.postData.start = this.postData.startdate.toString() + ' ' + this.postData.starttime;
+		this.postData.end = this.postData.enddate.toString() + ' ' + this.postData.endtime ;
+
 				console.log(this.postData);
-	;}
+	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
-		this.postData.start = this.postData.startdate.toString() + ' ' + this.postData.starttime;
-		this.postData.end = this.postData.enddate.toString() + ' ' + this.postData.endtime;
 		this.setState({loading: 'loading'});
 
 
@@ -155,10 +164,11 @@ class Facility extends Component {
 		  .end((err, res)　=> {
 					console.log(err);
 					console.log(res);
-					if(res.status == 200){
-
+					if(res.body.status == 0){
+						this.setState({ok_open: true});
 					}else {
-
+						this.setState({err_open: true});
+						console.log("しね！");
 					}
 
 					this.setState({loading: 'hide'});
@@ -169,6 +179,15 @@ class Facility extends Component {
 
 
   render() {
+
+		const actions = [
+			<FlatButton
+				label="Close"
+				primary={true}
+				onTouchTap={this.handleClose}
+			/>,
+		];
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
@@ -229,6 +248,22 @@ class Facility extends Component {
 					status={this.state.loading}
 					style={styles.refresh}
 				/>
+			 <Dialog
+				 modal={false}
+				 actions={actions}
+				 open={this.state.err_open}
+				 onRequestClose={this.handleClose}
+			 >
+				 その設備はすでに予約済みです。。。
+			 </Dialog>
+			 <Dialog
+				 modal={false}
+				 actions={actions}
+				 open={this.state.ok_open}
+				 onRequestClose={this.handleClose}
+			 >
+				 予約完了しました！
+			 </Dialog>
         </div>
       </MuiThemeProvider>
     );
