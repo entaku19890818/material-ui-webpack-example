@@ -14,11 +14,13 @@ import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import request from 'superagent';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
+import BookingTime from './BookingTime';
+import moment from 'moment';
 
 
 const dt = new Date();
 const HOSTNAME = 'localhost';
-const URL = 'http://' + HOSTNAME + ':3100/'
+const URL = 'http://' + HOSTNAME + ':3100/facility/'
 
 var date = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
 
@@ -45,6 +47,14 @@ const styles = {
 };
 
 const tableData = [
+	{
+		"starttime": "06:00",
+    "endtime": "07:00",
+  },
+	{
+		"starttime": "07:00",
+    "endtime": "08:00",
+  },
   {
 		"starttime": "08:00",
     "endtime": "09:00",
@@ -109,6 +119,24 @@ const muiTheme = getMuiTheme({
 
 
 class Facility extends Component {
+	bookingData = [];
+	constructor(props) {
+    super(props);
+		var facilityId = props.facilityId;
+
+		console.log(facilityId);
+		request
+			.get(URL + facilityId)
+			.end((err, res) => {
+				//レスポンスがJSONの場合
+				this.bookingData = res.body.facility;
+				console.log(this.bookingData);
+			});
+
+  }
+
+
+
 
 	postData = {
 		"desknetsId": 11,
@@ -150,13 +178,12 @@ class Facility extends Component {
 		this.postData.end = this.postData.enddate.toString() + ' ' + this.postData.endtime ;
 
 				console.log(this.postData);
+
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
 		this.setState({loading: 'loading'});
-
-
 		request
 		  .post(URL)
 			.type('form')
@@ -167,7 +194,7 @@ class Facility extends Component {
 					if(res.body.status == 0){
 						this.setState({ok_open: true});
 					}else {
-						this.setState({err_open: true});
+							this.setState({err_open: true});
 						console.log("しね！");
 					}
 
@@ -214,16 +241,26 @@ class Facility extends Component {
 						<TableHeader>
 							<TableRow>
 								<TableHeaderColumn>開始時間</TableHeaderColumn>
-								<TableHeaderColumn>終了時間</TableHeaderColumn>
 							</TableRow>
 						</TableHeader>
 						<TableBody>
+
 						{tableData.map( (row, index) => (
-              <TableRow key={index}>
-                <TableRowColumn>{row.starttime}</TableRowColumn>
-                <TableRowColumn>{row.endtime}</TableRowColumn>
-              </TableRow>
-              ))}
+							<TableRow key={index}>
+								<TableRowColumn>{row.starttime}</TableRowColumn>
+
+								{this.bookingData.map((data) => {
+									var starttime = moment(data.start).format("hh:mm");
+									console.log(starttime);
+									console.log(row.starttime);
+									if ( starttime == row.starttime){
+										console.log(starttime);
+										return <TableRowColumn>{data.start}</TableRowColumn>;
+									}
+								})}
+							</TableRow>
+							))}
+
 						</TableBody>
 						</Table>
 						<FlatButton

@@ -12,7 +12,8 @@ injectTapEventPlugin();
 // Render the main app react component into the app div.
 // For more details see: https://facebook.github.io/react/docs/top-level-api.html#react.render
 //render(<Main />, document.getElementById('app'));
-render(<Facility />, document.getElementById('facility'));
+render(<Facility facilityId='2' />, document.getElementById('kawano'));
+render(<Facility facilityId='1' />, document.getElementById('luke'));
 //render(<Human />, document.getElementById('human'));
 
 //render(<Card />, document.getElementById('card'));

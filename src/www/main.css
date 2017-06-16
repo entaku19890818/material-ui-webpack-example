@@ -10,13 +10,18 @@ body {
 	background-repeat: no-repeat;
 }
 
+div.kawano {
+	    height: 90px;
+	    width: 90px;
+	    left: 520px;
+	    top: 170px;
+	    position: absolute;
+}
 
 div.luke {
-
-	    height: 100px;
-	    width: 100px;
-	    left: 518px;
-	    top: 238px;
-	    position: relative;
-
+	    height: 90px;
+	    width: 90px;
+	    left: 520px;
+	    top: 245px;
+	    position: absolute;
 }
