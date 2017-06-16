@@ -15,7 +15,7 @@ import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColu
 import request from 'superagent';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 import BookingTime from './BookingTime';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 
 const dt = new Date();
@@ -250,12 +250,12 @@ class Facility extends Component {
 								<TableRowColumn>{row.starttime}</TableRowColumn>
 
 								{this.bookingData.map((data) => {
-									var starttime = moment(data.start).format("hh:mm");
+									var starttime = moment(data.start).tz('Asia/Tokyo').format("hh:mm");
 									console.log(starttime);
 									console.log(row.starttime);
 									if ( starttime == row.starttime){
 										console.log(starttime);
-										return <TableRowColumn>{data.start}</TableRowColumn>;
+										return <TableRowColumn>{data.title}</TableRowColumn>;
 									}
 								})}
 							</TableRow>
