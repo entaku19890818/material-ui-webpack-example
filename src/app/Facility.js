@@ -250,11 +250,11 @@ class Facility extends Component {
 								<TableRowColumn>{row.starttime}</TableRowColumn>
 
 								{this.bookingData.map((data) => {
-									var starttime = moment(data.start).tz('Asia/Tokyo').format("hh:mm");
+									var starttime = moment(data.start).tz('Asia/Tokyo').format("HH:mm");
 									console.log(starttime);
 									console.log(row.starttime);
 									if ( starttime == row.starttime){
-										console.log(starttime);
+
 										return <TableRowColumn>{data.title}</TableRowColumn>;
 									}
 								})}
