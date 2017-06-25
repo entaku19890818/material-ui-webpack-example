@@ -10,6 +10,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui/svg-icons/content/add-circle';
+import ChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import FlatButton from 'material-ui/FlatButton';
 import {Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn} from 'material-ui/Table';
 import request from 'superagent';
@@ -36,6 +38,15 @@ const styles = {
 		width: 120,
 		height: 120,
 		padding: 30,
+	},
+	middleIcon: {
+		width: 40,
+		height: 40,
+	},
+	middle: {
+		width: 80,
+		height: 80,
+		padding: 20,
 	},
 	container: {
 		position: 'relative',
@@ -119,21 +130,31 @@ const muiTheme = getMuiTheme({
 
 
 class Facility extends Component {
-	bookingData = [];
-	constructor(props) {
-    super(props);
-		var facilityId = props.facilityId;
 
+
+	getBooking = (facilityId ,date) => {
 		console.log(facilityId);
 		request
-			.get(URL + facilityId)
+			.get(URL + facilityId + '/' + date)
 			.end((err, res) => {
 				//レスポンスがJSONの場合
 				this.bookingData = res.body.facility;
 				console.log(this.bookingData);
 			});
+  };
 
+	constructor(props) {
+    super(props);
+		//親から機器
+		var facilityId = props.facilityId;
+		//予約情報を初期化
+		this.bookingData = [];
+		this.postData.facilityID = facilityId
+
+		this.getBooking(facilityId,date);
   }
+
+
 
 
 
@@ -147,10 +168,11 @@ class Facility extends Component {
 		"title": "TDL定例会議",
 		"start" : "",
 		"end" : "",
-		"facilityID": 1
+		"facilityID":''
 	};
 
 	state = {
+		date: date,
     open: false,
 		loading: 'hide',
 		err_open: false,
@@ -158,6 +180,19 @@ class Facility extends Component {
   };
 
 
+	nextDays = () => {
+    this.postData.startdate = moment(this.postData.startdate).add(1,"days").format("YYYY-MM-DD");
+		this.postData.enddate = moment(this.postData.enddate).add(1,"days").format("YYYY-MM-DD");
+		this.setState({date: this.postData.startdate});
+		this.getBooking(this.facilityId,date);
+  };
+	prevDays = () => {
+		this.postData.startdate = moment(this.postData.startdate).add(-1,"days").format("YYYY-MM-DD");
+		this.postData.enddate = moment(this.postData.enddate) .add(-1,"days").format("YYYY-MM-DD");
+
+		this.setState({date: this.postData.startdate});
+		this.getBooking(this.facilityId,date);
+	};
 
 	handleOpen = () => {
     this.setState({open: true});
@@ -236,6 +271,23 @@ class Facility extends Component {
 					autoScrollBodyContent={true}
 				>
 					The actions in this window were passed in as an array of React objects.
+					<IconButton
+						iconStyle={styles.middleIcon}
+						style={styles.middle}
+						touch={true}
+						onTouchTap={this.prevDays}
+						>
+						<ChevronLeft />
+					</IconButton>
+					<IconButton
+						iconStyle={styles.middleIcon}
+						style={styles.middle}
+						touch={true}
+						onTouchTap={this.nextDays}
+						>
+						<ChevronRight />
+					</IconButton>
+					現在の日付:{this.state.date}
 					<form onSubmit={this.handleSubmit}>
 					<Table onCellClick={this.changeTime}>
 						<TableHeader>
