@@ -29,7 +29,7 @@ var date = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
 
 
 
-const styles = {
+let styles = {
 	largeIcon: {
 		width: 60,
 		height: 60,
@@ -143,15 +143,36 @@ class Facility extends Component {
 			});
   };
 
+	getBookingNow = (facilityId ,datetime) => {
+		console.log(facilityId);
+		request
+			.get(URL + facilityId + '/' + datetime)
+			.end((err, res) => {
+				//レスポンスがJSONの場合
+				this.bookingDataNow = res.body.facility;
+						//現在時刻に予約があれば色を変える
+				if(this.bookingDataNow.length > 0 ){
+					this.state.Facility.iconStyle.color = '#E91E63';
+				}
+				console.log(this.state);
+			});
+  };
+
 	constructor(props) {
     super(props);
-		//親から機器
+		//親から機器IDをもらう
 		var facilityId = props.facilityId;
 		//予約情報を初期化
 		this.bookingData = [];
+		this.bookingDataNow = [];
 		this.postData.facilityID = facilityId
 
 		this.getBooking(facilityId,date);
+
+		this.getBookingNow(facilityId,moment().format());
+
+
+
   }
 
 
@@ -177,6 +198,9 @@ class Facility extends Component {
 		loading: 'hide',
 		err_open: false,
 		ok_open: false,
+		Facility:{
+			iconStyle: styles.largeIcon
+		}
   };
 
 
@@ -184,14 +208,14 @@ class Facility extends Component {
     this.postData.startdate = moment(this.postData.startdate).add(1,"days").format("YYYY-MM-DD");
 		this.postData.enddate = moment(this.postData.enddate).add(1,"days").format("YYYY-MM-DD");
 		this.setState({date: this.postData.startdate});
-		this.getBooking(this.facilityId,date);
+		this.getBooking(this.postData.facilityID,this.postData.startdate);
   };
 	prevDays = () => {
 		this.postData.startdate = moment(this.postData.startdate).add(-1,"days").format("YYYY-MM-DD");
 		this.postData.enddate = moment(this.postData.enddate) .add(-1,"days").format("YYYY-MM-DD");
 
 		this.setState({date: this.postData.startdate});
-		this.getBooking(this.facilityId,date);
+		this.getBooking(this.postData.facilityID,this.postData.startdate);
 	};
 
 	handleOpen = () => {
@@ -254,7 +278,7 @@ class Facility extends Component {
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.container}>
 				<IconButton
-					iconStyle={styles.largeIcon}
+					iconStyle={this.state.Facility.iconStyle}
 					style={styles.large}
 					tooltip="luke"
 					touch={true}
