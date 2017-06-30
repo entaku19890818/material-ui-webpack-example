@@ -135,7 +135,7 @@ class Facility extends Component {
 	getBooking = (facilityId ,date) => {
 		console.log(facilityId);
 		request
-			.get(URL + facilityId + '/' + date)
+			.get(URL + facilityId + '/' + date + '/' + moment(date).add(1,"days").format("YYYY-MM-DD"))
 			.end((err, res) => {
 				//レスポンスがJSONの場合
 				this.bookingData = res.body.facility;
