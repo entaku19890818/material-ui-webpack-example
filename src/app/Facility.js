@@ -60,64 +60,103 @@ let styles = {
 const tableData = [
 	{
 		"starttime": "06:00",
+    "endtime": "06:30",
+  },
+	{
+		"starttime": "06:30",
     "endtime": "07:00",
   },
-	{
+ 	{
 		"starttime": "07:00",
+    "endtime": "07:30",
+  },
+	{
+		"starttime": "07:30",
     "endtime": "08:00",
   },
-  {
+	 	{
 		"starttime": "08:00",
+    "endtime": "08:30",
+  },
+	{
+		"starttime": "08:30",
     "endtime": "09:00",
   },
-  {
+	 	{
 		"starttime": "09:00",
+    "endtime": "09:30",
+  },
+	{
+		"starttime": "09:30",
     "endtime": "10:00",
   },
-  {
+	 	{
 		"starttime": "10:00",
+    "endtime": "10:30",
+  },
+	{
+		"starttime": "10:30",
     "endtime": "11:00",
-  },
-  {
+  }, 	{
 		"starttime": "11:00",
+    "endtime": "11:30",
+  },
+	{
+		"starttime": "11:30",
     "endtime": "12:00",
-  },
-  {
+  }, 	{
 		"starttime": "12:00",
+    "endtime": "12:30",
+  },
+	{
+		"starttime": "12:30",
     "endtime": "13:00",
-  },
-  {
+  }, 	{
 		"starttime": "13:00",
+    "endtime": "13:30",
+  },
+	{
+		"starttime": "13:30",
     "endtime": "14:00",
-  },
-  {
+  }, 	{
 		"starttime": "14:00",
-    "endtime": "15:00",
+    "endtime": "14:30",
   },
 	{
+		"starttime": "14:30",
+    "endtime": "15:00",
+  }, 	{
 		"starttime": "15:00",
-		"endtime": "16:00",
-	},
+    "endtime": "15:30",
+  },
 	{
+		"starttime": "15:30",
+    "endtime": "16:00",
+  },
+		{
 		"starttime": "16:00",
-		"endtime": "17:00",
-	},
-	{
+    "endtime": "16:30",
+  },
+		{
+		"starttime": "16:30",
+    "endtime": "17:00",
+  },
+		{
 		"starttime": "17:00",
-		"endtime": "18:00",
-	},
-	{
+    "endtime": "17:30",
+  },
+		{
+		"starttime": "17:30",
+    "endtime": "18:00",
+  },
+			{
 		"starttime": "18:00",
-		"endtime": "19:00",
-	},
-	{
-		"starttime": "19:00",
-		"endtime": "20:00",
-	},
-	{
-		"starttime": "20:00",
-		"endtime": "21:00",
-	},
+    "endtime": "18:30",
+  },
+		{
+		"starttime": "18:30",
+    "endtime": "19:00",
+  },
 ];
 
 const muiTheme = getMuiTheme({
@@ -151,10 +190,15 @@ class Facility extends Component {
 				//レスポンスがJSONの場合
 				this.bookingDataNow = res.body.facility;
 						//現在時刻に予約があれば色を変える
-				if(this.bookingDataNow.length > 0 ){
+				if(res.body.facility.length > 0 ){
+
 					this.state.Facility.iconStyle.color = '#E91E63';
+					this.setState(Facility);
+					
 				}
 				console.log(this.state);
+				console.log(this.bookingDataNow.length);
+				
 			});
   };
 
@@ -165,7 +209,9 @@ class Facility extends Component {
 		//予約情報を初期化
 		this.bookingData = [];
 		this.bookingDataNow = [];
-		this.postData.facilityID = facilityId
+		this.postData.facilityID = facilityId;
+		this.state.Facility.iconStyle.color = '#000000';
+
 
 		this.getBooking(facilityId,date);
 
@@ -280,6 +326,7 @@ class Facility extends Component {
 				<IconButton
 					iconStyle={this.state.Facility.iconStyle}
 					style={styles.large}
+					color='#E91E63'
 					tooltip="luke"
 					touch={true}
 					tooltipPosition="top-left"
